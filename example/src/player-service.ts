@@ -7,6 +7,7 @@ import {
 
 import { playlist } from './playlist';
 import { AudioPro } from '../../src/audioPro';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 // Track the current playlist position
 let currentIndex = 0;
@@ -83,3 +84,19 @@ export function getProgressInterval(): number {
 export function setProgressInterval(ms: number): void {
 	AudioPro.setProgressInterval(ms);
 }
+
+
+const NOTIFICATIONS_PERMISSION = (PERMISSIONS.ANDROID as any).POST_NOTIFICATIONS; // Testing for Android only
+
+export async function requestNotificationsPermission() {
+      if (!NOTIFICATIONS_PERMISSION) {
+          return true; // For Android versions lower than 13, permission is granted by default
+      }
+      try {
+          const result = await request(NOTIFICATIONS_PERMISSION);
+          return result === RESULTS.GRANTED;
+      } catch (error) {
+          return false;
+      }
+    }
+

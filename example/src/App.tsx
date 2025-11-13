@@ -16,6 +16,7 @@ import { type AudioProTrack, useAudioPro } from 'react-native-audio-pro';
 import {
 	getCurrentTrackIndex,
 	getProgressInterval,
+	requestNotificationsPermission,
 	setCurrentTrackIndex,
 	setProgressInterval,
 } from './player-service';
@@ -31,6 +32,12 @@ export default function App() {
 	const currentTrack = playlist[currentIndex];
 	const { position, duration, state, playingTrack, playbackSpeed, volume, error } = useAudioPro();
 	const [ambientState, setAmbientState] = useState<'stopped' | 'playing' | 'paused'>('stopped');
+
+  useEffect(() => {
+    requestNotificationsPermission().then((granted) => {
+      console.log('Notifications permission granted:', granted);
+    });
+  }, []); 
 
 	// Sync the local index with the player service
 	useEffect(() => {
